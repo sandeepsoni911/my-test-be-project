@@ -1,7 +1,5 @@
 package com.sandeep.controller;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.UserDetailResponse;
 import com.sandeep.dto.UserDto;
 import com.sandeep.service.UserService;
