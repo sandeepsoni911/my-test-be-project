@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mysql.jdbc.StringUtils;
 import com.sandeep.business.CustomerBusiness;
 import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.CustomerDto;
+import com.sandeep.dto.CustomerListResponse;
 
 /**
  * Controller class for customers APIs
@@ -106,6 +108,28 @@ public class CustomerController {
 	public @ResponseBody ModelAndView getRegistrationPage(){
 		ModelAndView model = new ModelAndView("Register");
 		return model;
+		
+	}
+	
+
+	@CrossOrigin
+	@RequestMapping(value= "/searchCustomer/{searchString}" ,method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE )
+	public @ResponseBody List<CustomerDto> serachCustomers(@PathVariable String searchString){
+		List<CustomerDto> response = null;
+		if(!StringUtils.isNullOrEmpty(searchString)) {
+			response = 	customerBusiness.serachCustomers(searchString);
+		}
+		
+		return response;
+		
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value= "/customersList" ,method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE )
+	public @ResponseBody CustomerListResponse getCustomerDetails(Integer pageNumber, Integer perPage){
+		CustomerListResponse response = null;
+		response = customerBusiness.getCustomerDetailList(pageNumber, perPage);
+		return response;
 		
 	}
    
