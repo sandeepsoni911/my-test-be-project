@@ -90,29 +90,45 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public List<CustomerDto> serachCustomers(String searchString) {
-
+	public CustomerListResponse serachCustomers(String searchString ,
+			Integer pageNumber, Integer perPage) {
+		CustomerListResponse response = new CustomerListResponse();
 		List<CustomerDto> responseList = null;
 		CustomerDto customerDto = null;
-		List<Customer> custList = customerRepository
-					.searchCustomerDetailsByIdOrName(searchString);
-		if(!CollectionUtils.isEmpty(custList)){
-			responseList = new ArrayList<CustomerDto> ();
-			
-			for(Customer custObj : custList){
-				customerDto = new CustomerDto();
-				customerDto.setId(custObj.getCustomerId());
-				customerDto.setName(custObj.getCustomerName());
-				customerDto.setCity(custObj.getCustomerCity());
-				customerDto.setAddress(custObj.getCustomerAddress());
-				customerDto.setPhone(custObj.getCustomerPhone());
-				customerDto.setGender(custObj.getGender());
-				customerDto.setFatherName(custObj.getFatherName());
-				responseList.add(customerDto);
+		response.setPageNumber(pageNumber);
+		pageNumber = pageNumber == null ? 0 : pageNumber - 1;
+		perPage = perPage == null ? 10 : perPage;
+		response.setStatus("SUCCESS");
+		response.setMessage("No Records Found.");
+		try {
+			Pageable pageable = new PageRequest(pageNumber, perPage);
+			List<Customer> custList = customerRepository.searchCustomerDetailsByIdOrName(searchString, pageable);
+			Long totalCount = customerRepository.searchCustomerDetailsCountByIdOrName(searchString);
+			if (!CollectionUtils.isEmpty(custList)) {
+				response.setMessage(totalCount.intValue()+" Records Found.");
+				response.setTotalCount(totalCount.intValue());
+				response.setPerPage(perPage);
+				responseList = new ArrayList<CustomerDto>();
+
+				for (Customer custObj : custList) {
+					customerDto = new CustomerDto();
+					customerDto.setId(custObj.getCustomerId());
+					customerDto.setName(custObj.getCustomerName());
+					customerDto.setCity(custObj.getCustomerCity());
+					customerDto.setAddress(custObj.getCustomerAddress());
+					customerDto.setPhone(custObj.getCustomerPhone());
+					customerDto.setGender(custObj.getGender());
+					customerDto.setFatherName(custObj.getFatherName());
+					responseList.add(customerDto);
+				}
 			}
+		} catch (Exception e) {
+			response.setStatus("FAILED");
+			response.setMessage(e.getMessage());
 		}
-		return responseList;
-	
+		response.setData(responseList);
+		return response;
+
 	}
 
 	@Override

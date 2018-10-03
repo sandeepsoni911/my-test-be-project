@@ -114,15 +114,17 @@ public class CustomerController {
 
 	@CrossOrigin
 	@RequestMapping(value= "/searchCustomer/{searchString}" ,method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE )
-	public @ResponseBody List<CustomerDto> serachCustomers(@PathVariable String searchString){
-		List<CustomerDto> response = null;
+	public @ResponseBody CustomerListResponse serachCustomers(@PathVariable String searchString,
+																Integer pageNumber, Integer perPage){
+		CustomerListResponse response = null;
 		if(!StringUtils.isNullOrEmpty(searchString)) {
-			response = 	customerBusiness.serachCustomers(searchString);
+			response = 	customerBusiness.serachCustomers(searchString, pageNumber, perPage);
 		}
 		
 		return response;
 		
 	}
+	
 	
 	@CrossOrigin
 	@RequestMapping(value= "/customersList" ,method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE )

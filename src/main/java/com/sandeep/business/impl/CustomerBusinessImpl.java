@@ -37,9 +37,12 @@ public class CustomerBusinessImpl implements CustomerBusiness{
 	}
 
 	@Override
-	public List<CustomerDto> serachCustomers(String searchString) {
+	public CustomerListResponse serachCustomers(String searchString,
+						Integer pageNumber, Integer perPage) {
+		pageNumber = pageNumber ==null?1:pageNumber;
+		perPage = perPage ==null?10:perPage;
 		
-		return customerService.serachCustomers(searchString);
+		return customerService.serachCustomers(searchString, pageNumber, perPage);
 	}
 	
 	

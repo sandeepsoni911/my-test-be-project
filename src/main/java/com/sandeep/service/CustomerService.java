@@ -31,7 +31,8 @@ public interface CustomerService {
 	 * To search list of all customers
 	 * @return
 	 */
-	public List<CustomerDto> serachCustomers(String searchString);
+	public CustomerListResponse serachCustomers(String searchString,
+								Integer pageNumber, Integer perPage);
 	
 	
 	/**

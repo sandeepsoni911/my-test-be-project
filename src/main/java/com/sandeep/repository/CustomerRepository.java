@@ -24,12 +24,15 @@ public interface CustomerRepository extends JpaRepository<Customer , String>{
 	Customer  getCustomerDetailsById(Long customerId);
 	
 	@Query("select customer from com.sandeep.entity.Customer customer where name like %?1%")
-	List<Customer>  searchCustomerDetailsByIdOrName(String customerId);
+	List<Customer>  searchCustomerDetailsByIdOrName(String customerId,Pageable pageable);
 	
 	@Query("select customer from com.sandeep.entity.Customer customer")
 	List<Customer> getAllCustomers(Pageable pageable);
 	
 	@Query("select count(customer) from com.sandeep.entity.Customer customer")
 	Long getAllCustomersCount();
+
+	@Query("select count(customer) from com.sandeep.entity.Customer customer  where name like %?1%")
+	Long searchCustomerDetailsCountByIdOrName(String searchString);
 
 }
