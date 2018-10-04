@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.OrderDto;
+import com.sandeep.dto.OrderListResponse;
 
 /**
  * Service class for Orders
@@ -23,7 +24,7 @@ public interface OrderService {
 	 * To get all loans 
 	 * @return
 	 */
-	List<OrderDto>  getAllOrderDetails();
+	OrderListResponse  getAllOrderDetails(Integer pageNumber, Integer perPage);
 
 	/**
 	 * To get all loans by customer

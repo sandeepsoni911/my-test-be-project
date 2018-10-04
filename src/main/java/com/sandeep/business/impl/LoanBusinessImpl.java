@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sandeep.business.LoanBusiness;
 import com.sandeep.dto.LoanDetailsDto;
+import com.sandeep.dto.LoanListResponse;
 import com.sandeep.service.LoanService;
 
 @Component
@@ -24,8 +25,8 @@ public class LoanBusinessImpl implements LoanBusiness {
 	}
 
 	@Override
-	public List<LoanDetailsDto> getAllLoanDetails() {
-		return loanService.getAllLoanDetails();
+	public LoanListResponse getAllLoanDetails(Integer pageNumber, Integer perPage) {
+		return loanService.getAllLoanDetails(pageNumber, perPage);
 	}
 
 	@Transactional()

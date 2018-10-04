@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sandeep.business.CustomerBusiness;
+import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.CustomerDto;
 import com.sandeep.dto.CustomerListResponse;
 import com.sandeep.service.CustomerService;
@@ -22,7 +23,7 @@ public class CustomerBusinessImpl implements CustomerBusiness{
 	CustomerService customerService;
 	
 	@Override
-	public String register(CustomerDto customer) {
+	public BaseResponse register(CustomerDto customer) {
 		return customerService.register(customer);
 	}
 

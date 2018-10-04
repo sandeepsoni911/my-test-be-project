@@ -3,6 +3,7 @@ package com.sandeep.business;
 import java.util.List;
 
 import com.sandeep.dto.LoanDetailsDto;
+import com.sandeep.dto.LoanListResponse;
 
 public interface LoanBusiness {
 
@@ -17,7 +18,7 @@ public interface LoanBusiness {
 	 * To get all loans 
 	 * @return
 	 */
-	List<LoanDetailsDto>  getAllLoanDetails();
+	LoanListResponse  getAllLoanDetails(Integer pageNumber, Integer perPage);
 
 	/**
 	 * To get all loans by customer

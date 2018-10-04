@@ -9,9 +9,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sandeep.dto.LoanDetailsDto;
+import com.sandeep.dto.LoanListResponse;
 import com.sandeep.entity.Customer;
 import com.sandeep.entity.Loan;
 import com.sandeep.entity.LoanPayments;
@@ -73,35 +76,55 @@ public class LoanServiceImpl implements LoanService {
 	}
 
 	@Override
-	public List<LoanDetailsDto> getAllLoanDetails() {
+	public LoanListResponse getAllLoanDetails(Integer pageNumber, Integer perPage) {
+		LoanListResponse response = new LoanListResponse();
+		response.setPageNumber(pageNumber);
+		response.setStatus("FAILED");
+		response.setPerPage(perPage);
+		response.setMessage("No Records Found");
 		List<LoanDetailsDto> loanDetailList = null;
-		List<Loan> loanList = loanRepository.getAllLoanDetails();
-		LoanDetailsDto loanDetailsDto = null;
-		if(!CollectionUtils.isEmpty(loanList)){
-			loanDetailList = new ArrayList<LoanDetailsDto>();
-			for(Loan loan:loanList){
-				
-				loanDetailsDto = new LoanDetailsDto();
-				
-				loanDetailsDto.setComments(loan.getComments());
-				loanDetailsDto.setCustomerId(loan.getCustomer().getCustomerId());
-				loanDetailsDto.setItemQuality(loan.getItemQuality());
-				loanDetailsDto.setDueDate(loan.getDueDate());
-				loanDetailsDto.setItemName(loan.getItemName());
-				loanDetailsDto.setItemType(loan.getItemType());
-				loanDetailsDto.setLoanAmount(loan.getLoanAmount());
-				loanDetailsDto.setLoanId(loan.getLoanId());
-				loanDetailsDto.setRateOfInterest(loan.getRateOfInterest());
-				loanDetailsDto.setStatus(loan.getStatus());
-				loanDetailsDto.setWeight(loan.getWeight());
-				loanDetailsDto.setCustomerName(loan.getCustomer().getCustomerName());
-				loanDetailsDto.setCreatedDate(loan.getCreatedDate());
-				
-				loanDetailList.add(loanDetailsDto);
+		pageNumber = pageNumber == null ? 0 : pageNumber - 1;
+		perPage = perPage == null ? 10 : perPage;
+
+		try {
+			Pageable pageable = new PageRequest(pageNumber, perPage);
+			List<Loan> loanList = loanRepository.getAllLoanDetails(pageable);
+			Long totalCount = loanRepository.getAllLoanDetailsCount();
+			LoanDetailsDto loanDetailsDto = null;
+			if (!CollectionUtils.isEmpty(loanList)) {
+				response.setMessage(totalCount+" Records Found");
+				response.setStatus("SUCCESS");
+				response.setTotalCount(totalCount.intValue());
+				loanDetailList = new ArrayList<LoanDetailsDto>();
+				for (Loan loan : loanList) {
+
+					loanDetailsDto = new LoanDetailsDto();
+
+					loanDetailsDto.setComments(loan.getComments());
+					loanDetailsDto.setCustomerId(loan.getCustomer().getCustomerId());
+					loanDetailsDto.setItemQuality(loan.getItemQuality());
+					loanDetailsDto.setDueDate(loan.getDueDate());
+					loanDetailsDto.setItemName(loan.getItemName());
+					loanDetailsDto.setItemType(loan.getItemType());
+					loanDetailsDto.setLoanAmount(loan.getLoanAmount());
+					loanDetailsDto.setLoanId(loan.getLoanId());
+					loanDetailsDto.setRateOfInterest(loan.getRateOfInterest());
+					loanDetailsDto.setStatus(loan.getStatus());
+					loanDetailsDto.setWeight(loan.getWeight());
+					loanDetailsDto.setCustomerName(loan.getCustomer().getCustomerName());
+					loanDetailsDto.setCreatedDate(loan.getCreatedDate());
+
+					loanDetailList.add(loanDetailsDto);
+				}
 			}
+		} catch (Exception e) {
+			response.setStatus("FAILED");
+			response.setMessage(e.getMessage());
 		}
-		
-		return loanDetailList;
+
+		response.setData(loanDetailList);
+
+		return response;
 	}
 
 	@Override

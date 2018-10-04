@@ -12,7 +12,7 @@ public class CustomerDto {
 	
 	private Long id;
 	
-	private String name;
+	private String fullName;
 	
 	private String fatherName;
 	
@@ -44,12 +44,20 @@ public class CustomerDto {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	
+
+	/**
+	 * @return the fullName
+	 */
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	/**
+	 * @param fullName the fullName to set
+	 */
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getAddress() {

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.CustomerDto;
 import com.sandeep.dto.CustomerListResponse;
 import com.sandeep.entity.Customer;
@@ -26,23 +27,27 @@ public class CustomerServiceImpl implements CustomerService{
 	CustomerRepository customerRepository;
 	
 	@Override
-	public String register(CustomerDto customer) {
-		String response = "Error occured while registration";
+	public BaseResponse register(CustomerDto customer) {
+		BaseResponse response = new BaseResponse();
+		response.setStatus("SUCCESS");
+		response.setMessage("Successfully Registered!");
 		if(customer != null){
 			Customer custObj = new Customer();
 			custObj.setCustomerAddress(customer.getAddress());
 			custObj.setCustomerCity(customer.getCity());
-			custObj.setCustomerName(customer.getName());
+			custObj.setCustomerName(customer.getFullName());
 			custObj.setCustomerPhone(customer.getPhone());
 			custObj.setGender(customer.getGender());
 			custObj.setFatherName(customer.getFatherName());
 			custObj.setStatus("ACTIVE");
 			
-			custObj = customerRepository.save(custObj);
-			
-			if(custObj != null){
-				response = "Successfully Registered!";
+			try {
+				custObj = customerRepository.save(custObj);
+			}catch(Exception e) {
+				response.setMessage(e.getMessage());
+				response.setStatus("FAILED");	
 			}
+			
 		}
 		return response;
 	}
@@ -58,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService{
 			for(Customer custObj : custList){
 				customerDto = new CustomerDto();
 				customerDto.setId(custObj.getCustomerId());
-				customerDto.setName(custObj.getCustomerName());
+				customerDto.setFullName(custObj.getCustomerName());
 				customerDto.setCity(custObj.getCustomerCity());
 				customerDto.setAddress(custObj.getCustomerAddress());
 				customerDto.setPhone(custObj.getCustomerPhone());
@@ -80,7 +85,7 @@ public class CustomerServiceImpl implements CustomerService{
 			customerDto.setCity(custObj.getCustomerCity());
 			customerDto.setGender(custObj.getGender());
 			customerDto.setId(custObj.getCustomerId());
-			customerDto.setName(custObj.getCustomerName());
+			customerDto.setFullName(custObj.getCustomerName());
 			customerDto.setPhone(custObj.getCustomerPhone());
 			customerDto.setStatus(custObj.getStatus());
 			customerDto.setFatherName(custObj.getFatherName());
@@ -113,7 +118,7 @@ public class CustomerServiceImpl implements CustomerService{
 				for (Customer custObj : custList) {
 					customerDto = new CustomerDto();
 					customerDto.setId(custObj.getCustomerId());
-					customerDto.setName(custObj.getCustomerName());
+					customerDto.setFullName(custObj.getCustomerName());
 					customerDto.setCity(custObj.getCustomerCity());
 					customerDto.setAddress(custObj.getCustomerAddress());
 					customerDto.setPhone(custObj.getCustomerPhone());
@@ -159,7 +164,7 @@ public class CustomerServiceImpl implements CustomerService{
 				for(Customer custObj : custList){
 					customerDto = new CustomerDto();
 					customerDto.setId(custObj.getCustomerId());
-					customerDto.setName(custObj.getCustomerName());
+					customerDto.setFullName(custObj.getCustomerName());
 					customerDto.setCity(custObj.getCustomerCity());
 					customerDto.setAddress(custObj.getCustomerAddress());
 					customerDto.setPhone(custObj.getCustomerPhone());

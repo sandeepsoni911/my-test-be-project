@@ -1,7 +1,6 @@
 package com.sandeep.controller;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +21,7 @@ import com.sandeep.business.LoanPaymentBusiness;
 import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.CustomerDto;
 import com.sandeep.dto.LoanDetailsDto;
+import com.sandeep.dto.LoanListResponse;
 import com.sandeep.dto.LoanPaymentDetails;
 
 /**
@@ -58,10 +58,10 @@ public class LoanDetailsController {
 	
 	@CrossOrigin
 	@RequestMapping(value="/loan" , method=RequestMethod.GET)
-	public @ResponseBody List<LoanDetailsDto> getLoanDetails(){
-		List<LoanDetailsDto> response = null;
+	public @ResponseBody LoanListResponse getLoanDetails(Integer pageNumber, Integer perPage){
+		LoanListResponse response = null;
 		
-		response = loanBusiness.getAllLoanDetails();
+		response = loanBusiness.getAllLoanDetails(pageNumber, perPage);
 		
 		return response;
 	}
@@ -91,9 +91,9 @@ public class LoanDetailsController {
 	
 	@CrossOrigin
 	@RequestMapping(value="/loanByCustomerDetails" , method=RequestMethod.GET, consumes= MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<LoanDetailsDto> getLoanByCustName(){
-		List<LoanDetailsDto> response = null;
-		response = loanBusiness.getAllLoanDetails(); // write method to get loan deatils by customer name
+	public @ResponseBody LoanListResponse getLoanByCustName(Integer pageNumber, Integer perPage){
+		LoanListResponse response = null;
+		response = loanBusiness.getAllLoanDetails(pageNumber, perPage); // write method to get loan deatils by customer name
 		
 		return response;
 	}
@@ -120,12 +120,12 @@ public class LoanDetailsController {
 	
 	@CrossOrigin
 	@RequestMapping(value= "/loanDetails" ,method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE )
-	public @ResponseBody ModelAndView getAllLoanDetails(){
+	public @ResponseBody ModelAndView getAllLoanDetails(Integer pageNumber, Integer perPage){
 		ModelAndView model = new ModelAndView("LoanDetails");
 		List<CustomerDto> customerList = customerBusiness.getCustomerList();
-		List<LoanDetailsDto> loanDetailList = loanBusiness.getAllLoanDetails();
+		LoanListResponse loanDetailList = loanBusiness.getAllLoanDetails(pageNumber, 100);
 		model.addObject("customerDtoList", customerList);
-		model.addObject("loanDetailList", loanDetailList);
+		model.addObject("loanDetailList", loanDetailList.getData());
 		return model;
 		
 	}

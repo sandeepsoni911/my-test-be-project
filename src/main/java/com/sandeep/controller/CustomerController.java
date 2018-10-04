@@ -47,9 +47,7 @@ public class CustomerController {
 			return baseResponse ;
 		}
 		
-		String response = customerBusiness.register(customerDto);
-		baseResponse.setMessage(response);
-		baseResponse.setStatus("SUCCESS");
+		baseResponse = customerBusiness.register(customerDto);
 		return baseResponse;
 		
 	}
@@ -63,9 +61,7 @@ public class CustomerController {
 			baseResponse.setStatus("ERROR");
 			return baseResponse ;
 		}
-		String response = customerBusiness.register(customerDto);
-		baseResponse.setMessage(response);
-		baseResponse.setStatus("SUCCESS");
+		baseResponse = customerBusiness.register(customerDto);
 		return baseResponse;
 		
 	}

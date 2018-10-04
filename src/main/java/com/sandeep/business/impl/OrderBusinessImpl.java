@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sandeep.business.OrderBusiness;
 import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.OrderDto;
+import com.sandeep.dto.OrderListResponse;
 import com.sandeep.service.OrderService;
 
 /**
@@ -38,9 +39,9 @@ public class OrderBusinessImpl implements OrderBusiness {
 	}
 
 	@Override
-	public List<OrderDto> getAllOrderDetails() {
+	public OrderListResponse getAllOrderDetails(Integer pageNumber, Integer perPage) {
 		logger.info("Fetching all order details");
-		return orderService.getAllOrderDetails();
+		return orderService.getAllOrderDetails(pageNumber, perPage);
 	}
 
 	@Override

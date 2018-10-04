@@ -6,10 +6,13 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.OrderDto;
+import com.sandeep.dto.OrderListResponse;
 import com.sandeep.entity.Customer;
 import com.sandeep.entity.Order;
 import com.sandeep.repository.CustomerRepository;
@@ -81,17 +84,41 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<OrderDto> getAllOrderDetails() {
+	public OrderListResponse getAllOrderDetails(Integer pageNumber, Integer perPage) {
+		OrderListResponse response = new OrderListResponse();
 		List<OrderDto> orderDetailsList = null;
-		List<Order> orderList = orderRepository.getAllOrders();
-		if(CollectionUtils.isNotEmpty(orderList)) {
-			orderDetailsList = new ArrayList<OrderDto>();
-			for(Order order : orderList) {
-				OrderDto dto = convertToOrderDto(order);
-				orderDetailsList.add(dto);
+		
+		response.setPageNumber(pageNumber);
+		response.setStatus("FAILED");
+		response.setPerPage(perPage);
+		response.setMessage("No Records Found");
+		pageNumber = pageNumber == null ? 0 : pageNumber - 1;
+		perPage = perPage == null ? 10 : perPage;
+		
+		try {
+			Pageable pageable = new PageRequest(pageNumber, perPage);
+			List<Order> orderList = orderRepository.getAllOrders(pageable);
+			Long totalCount = orderRepository.getAllOrdersCount();
+			if(CollectionUtils.isNotEmpty(orderList)) {
+				
+				response.setMessage(totalCount+" Records Found");
+				response.setStatus("SUCCESS");
+				response.setTotalCount(totalCount.intValue());
+				
+				orderDetailsList = new ArrayList<OrderDto>();
+				for(Order order : orderList) {
+					OrderDto dto = convertToOrderDto(order);
+					orderDetailsList.add(dto);
+				}
 			}
+			
+		}catch(Exception e) {
+			response.setStatus("FAILED");
+			response.setMessage(e.getMessage());
 		}
-		return orderDetailsList;
+		
+		response.setData(orderDetailsList);
+		return response;
 	}
 
 	/**

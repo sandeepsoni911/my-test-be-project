@@ -2,7 +2,7 @@ package com.sandeep.business;
 
 import java.util.List;
 
-
+import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.CustomerDto;
 import com.sandeep.dto.CustomerListResponse;
 
@@ -14,7 +14,7 @@ public interface CustomerBusiness {
 	 * @param customerDto
 	 * @return
 	 */
-	public String register(CustomerDto customer);
+	public BaseResponse register(CustomerDto customer);
 	
 	/**
 	 * To get list of all customers

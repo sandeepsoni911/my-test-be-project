@@ -17,6 +17,7 @@ import com.sandeep.business.OrderBusiness;
 import com.sandeep.business.OrderPaymentBusiness;
 import com.sandeep.dto.BaseResponse;
 import com.sandeep.dto.OrderDto;
+import com.sandeep.dto.OrderListResponse;
 import com.sandeep.dto.OrderPaymentDto;
 
 /**
@@ -36,9 +37,9 @@ public class OrderController {
 	
 	@CrossOrigin
 	@RequestMapping(value="/order" , method=RequestMethod.GET)
-	public @ResponseBody List<OrderDto> getOrderDetails(){
-		List<OrderDto> response = null;
-		response = orderBusiness.getAllOrderDetails();
+	public @ResponseBody OrderListResponse getOrderDetails(Integer pageNumber, Integer perPage){
+		OrderListResponse response = null;
+		response = orderBusiness.getAllOrderDetails(pageNumber, perPage);
 		return response;
 	}
 	

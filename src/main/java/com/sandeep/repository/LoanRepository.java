@@ -2,6 +2,7 @@ package com.sandeep.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,10 @@ public interface LoanRepository extends JpaRepository<Loan, String>{
 	
 	
 	@Query("select loan from com.sandeep.entity.Loan loan")
-	List<Loan>  getAllLoanDetails();
+	List<Loan>  getAllLoanDetails(Pageable pageable);
+	
+	@Query("select count(loan) from com.sandeep.entity.Loan loan")
+	Long  getAllLoanDetailsCount();
 	
 	@Query("select loan from com.sandeep.entity.Loan loan where loan.status='OPEN'")
 	List<Loan>  getOpenLoanDetails();
